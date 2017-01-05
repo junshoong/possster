@@ -2,9 +2,10 @@
 2017년 SSS 겨울 프로젝트 웹 대자보/포스터 possster
 
 ## 개발 환경
-
-- python 3.5
+- windows 10
+- python 3.5 or 3.6
 - django 1.10
+- postgresql 9.61
 
 ## Work Flow
 
