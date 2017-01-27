@@ -3,8 +3,20 @@ python:
   - "3.5"
   - "3.6"
 
+addons:
+  firefox: latest
+
 env:
   - DJANGO_SETTINGS_MODULE=possster.settings
+
+# for selenium test
+before_install:
+  -latest_gecko=`curl -s -L https://github.com/mozilla/geckodriver/releases | grep linux64.tar.gz | head -n 1 | cut -d '"' -f 2`
+  - wget http://github.com"$latest_gecko" -O - | tar -zxf -
+  - export PATH=$PATH:$PWD
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
 
 # command to install dependencies
 install: "pip install -r requirements.txt"
