@@ -1,8 +1,11 @@
 from django.test import TestCase
 from django.test import override_settings
+from django.test.client import RequestFactory
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.urlresolvers import resolve
 from django.contrib.auth.models import User
 from poster.models import Poster
+from poster.views import PosterLV
 from datetime import datetime
 from datetime import timedelta
 
@@ -57,4 +60,23 @@ class PosterModelTest(TestCase):
         import os
         for f in glob.glob('/tmp/django_test/poster/*'):
             os.remove(f)
+
+
+class PosterLVTest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_root_url_resolves_to_poster_list_page_view(self):
+        found = resolve('/')
+        self.assertEqual(found.func.__name__, PosterLV.__name__)
+
+    def test_poster_list_page_returns_correct_html(self):
+        request = self.factory.get('/')
+        request.session = {}
+        view_func = PosterLV.as_view()
+        response = view_func(request)
+        response.render()
+        html = response.content.decode('utf8')
+        self.assertIn('<title>Possster</title>', html)
+        self.assertTrue(html.endswith('</html>'))
 
