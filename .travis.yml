@@ -11,7 +11,7 @@ env:
 
 # for selenium test
 before_install:
-  -latest_gecko=`curl -s -L https://github.com/mozilla/geckodriver/releases | grep linux64.tar.gz | head -n 1 | cut -d '"' -f 2`
+  - latest_gecko=`curl -s -L https://github.com/mozilla/geckodriver/releases | grep linux64.tar.gz | head -n 1 | cut -d '"' -f 2`
   - wget http://github.com"$latest_gecko" -O - | tar -zxf -
   - export PATH=$PATH:$PWD
   - export DISPLAY=:99.0
