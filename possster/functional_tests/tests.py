@@ -1,8 +1,8 @@
-from django.test import TestCase
+from django.test import LiveServerTestCase
 from selenium import webdriver
 
 
-class HomeViewTest(TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -11,5 +11,5 @@ class HomeViewTest(TestCase):
         self.browser.quit()
 
     def test_open_browser(self):
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         self.assertIn("Possster", self.browser.title)
