@@ -1,3 +1,8 @@
 from django.contrib import admin
+from poster.models import Poster
 
-# Register your models here.
+
+class PosterAdmin(admin.ModelAdmin):
+    list_display = ('title', 'writer', 'end')
+
+admin.site.register(Poster, PosterAdmin)
