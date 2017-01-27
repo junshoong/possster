@@ -14,4 +14,6 @@ class Poster(models.Model):
 
     @property
     def is_over(self):
+        if self.end is None:
+            return False
         return self.end < datetime.now()
