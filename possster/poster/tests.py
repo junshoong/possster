@@ -1,15 +1,14 @@
 from django.test import TestCase
-from possster.settings import MEDIA_ROOT
+from django.test import override_settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
 from poster.models import Poster
 from datetime import datetime
 from datetime import timedelta
-import glob
-import os
 
 
-class PosterTest(TestCase):
+@override_settings(MEDIA_ROOT='/tmp/django_test/')
+class PosterModelTest(TestCase):
 
     _image = SimpleUploadedFile(name='test_image.jpg', content=None, content_type='image/jpeg')
 
@@ -47,10 +46,15 @@ class PosterTest(TestCase):
         expired_poster = Poster.objects.create(title='test_poster', image=self._image, writer=user, end=yesterday)
         self.assertTrue(expired_poster.is_over)
 
-        expired_poster = Poster.objects.create(title='test_poster2', image=self._image, writer=user, end=tomorrow)
-        self.assertFalse(expired_poster.is_over)
+        not_expired_poster = Poster.objects.create(title='test_poster2', image=self._image, writer=user, end=tomorrow)
+        self.assertFalse(not_expired_poster.is_over)
+
+        no_end_poster = Poster.objects.create(title='test_poster2', image=self._image, writer=user)
+        self.assertFalse(no_end_poster.is_over)
 
     def tearDown(self):
-        for f in glob.glob(MEDIA_ROOT+'/poster/test_image*.jpg'):
+        import glob
+        import os
+        for f in glob.glob('/tmp/django_test/poster/*'):
             os.remove(f)
 
