@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.views.generic import ListView
+from poster.models import Poster
 
-# Create your views here.
+
+class PosterLV(ListView):
+    model = Poster
+    template_name = 'poster/poster_list.html'
+
