@@ -77,7 +77,7 @@ class PosterEditTest(TestCase):
 
     _image = SimpleUploadedFile(
         name='test_image.jpg',
-        content=open(os.path.join(BASE_DIR, 'media/testfile/test_image.jpg'), 'rb').read(),
+        content=open(BASE_DIR+'/../testfile/test_image.jpg', 'rb').read(),
         # content=open('media/testfile/test_image.jpg', 'rb').read(),
         content_type='image/jpeg'
     )
