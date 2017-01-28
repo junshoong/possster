@@ -2,10 +2,13 @@ from django.test import TestCase
 from django.test import override_settings
 from django.test.client import Client
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
 from poster.models import Poster
+from possster.settings import BASE_DIR
 from datetime import datetime
 from datetime import timedelta
+import os
 
 
 @override_settings(MEDIA_ROOT='/tmp/django_test/')
@@ -69,10 +72,42 @@ class PosterLVTest(TestCase):
         self.assertTemplateUsed(response, 'poster/poster_list.html')
 
 
+@override_settings(MEDIA_ROOT='/tmp/django_test/')
 class PosterEditTest(TestCase):
+
+    _image = SimpleUploadedFile(
+        name='test_image.jpg',
+        content=open(os.path.join(BASE_DIR, 'media/testfile/test_image.jpg'), 'rb').read(),
+        # content=open('media/testfile/test_image.jpg', 'rb').read(),
+        content_type='image/jpeg'
+    )
+
+    @staticmethod
+    def _create_user():
+        user = User.objects.create(username='test')
+        return user
+
     def setUp(self):
         self.client = Client()
+
+    def tearDown(self):
+        import glob
+        for f in glob.glob('/tmp/django_test/poster/*'):
+            os.remove(f)
 
     def test_uses_poster_add_template(self):
         response = self.client.get('/add/')
         self.assertTemplateUsed(response, 'poster/poster_form.html')
+
+    def test_can_save_a_POST_request(self):
+        user = self._create_user()
+        response = self.client.post(reverse_lazy('add'), {
+            'title': "Test Poster 1",
+            'image': self._image,
+            'writer': user.pk,
+        })
+        new_poster = Poster.objects.first()
+        self.assertEqual(Poster.objects.count(), 1)
+        self.assertEqual(new_poster.title, 'Test Poster 1')
+        self.assertEqual(new_poster.writer.username, 'test')
+        self.assertEqual(302, response.status_code)

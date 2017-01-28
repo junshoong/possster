@@ -19,5 +19,8 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('Possster', header.text)
 
         # upload 버튼을 눌러 포스터를 새로 등록하는 화면으로 이동합니다.
+        upload_link = self.browser.find_element_by_id('id_upload')
+        self.assertEqual(upload_link.text, 'upload')
         # 내용을 채우고 등록버튼을 눌러 포스터를 등록합니다.
+
         # 메인화면으로 돌아가 등록된 포스터를 확인합니다.

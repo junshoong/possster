@@ -6,5 +6,11 @@
 </head>
 <body>
 <h1>Possster</h1>
+<a id="id_upload" href="{% url 'add' %}">upload</a>
+<ul>
+    {% for p in poster %}
+        <li><img src="{{ p.image.url }}" /></li>
+    {% endfor %}
+</ul>
 </body>
 </html>
