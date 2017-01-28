@@ -67,3 +67,12 @@ class PosterLVTest(TestCase):
     def test_uses_poster_list_template(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'poster/poster_list.html')
+
+
+class PosterEditTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_uses_poster_add_template(self):
+        response = self.client.get('/add/')
+        self.assertTemplateUsed(response, 'poster/poster_form.html')

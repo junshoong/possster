@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
 from poster.views import PosterLV
+from poster.views import PosterCV
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', PosterLV.as_view(), name='poster'),
+    url(r'^$', PosterLV.as_view(), name='index'),
+    url(r'^add/$', PosterCV.as_view(), name='add'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
