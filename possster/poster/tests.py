@@ -19,6 +19,8 @@ class PosterModelTest(TestCase):
     @staticmethod
     def _create_user():
         user = User.objects.create(username='test')
+        user.set_password('test')
+        user.save()
         return user
 
     def test_saving_and_retrieving_poster(self):
@@ -84,6 +86,8 @@ class PosterEditTest(TestCase):
     @staticmethod
     def _create_user():
         user = User.objects.create(username='test')
+        user.set_password('test')
+        user.save()
         return user
 
     def setUp(self):
@@ -94,12 +98,21 @@ class PosterEditTest(TestCase):
         for f in glob.glob('/tmp/django_test/poster/*'):
             os.remove(f)
 
-    def test_uses_poster_add_template(self):
+    def test_uses_poster_form_template(self):
+        # 로그인 전
+        response = self.client.get('/add/', follow=True)
+        self.assertRedirects(response, '/login/?next=/add/')
+        self.assertTemplateUsed(response, 'registration/login.html')
+
+        # 로그인 후
+        self._create_user()
+        self.client.login(username='test', password='test')
         response = self.client.get('/add/')
         self.assertTemplateUsed(response, 'poster/poster_form.html')
 
     def test_can_save_a_POST_request(self):
         user = self._create_user()
+        self.client.login(username='test', password='test')
         response = self.client.post(reverse_lazy('add'), {
             'title': "Test Poster 1",
             'image': self._image,

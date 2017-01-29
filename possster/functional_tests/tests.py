@@ -53,6 +53,10 @@ class NewVisitorTest(LiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
+        import glob
+        import os
+        for f in glob.glob('/tmp/django_test/poster/*'):
+            os.remove(f)
 
     def test_open_browser(self):
         self._create_user()
