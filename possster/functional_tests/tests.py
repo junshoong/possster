@@ -1,5 +1,4 @@
 from django.test import LiveServerTestCase
-from django.test import override_settings
 from selenium import webdriver
 from possster.settings import BASE_DIR
 from django.contrib.auth.models import User
@@ -32,7 +31,7 @@ class wait_for_page_load(object):
     def __exit__(self, *_):
         wait_for(self.page_has_loaded)
 
-@override_settings(MEDIA_ROOT='/tmp/django_test/')
+
 class NewVisitorTest(LiveServerTestCase):
 
     @staticmethod
@@ -48,7 +47,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.quit()
 
     def test_open_browser(self):
-        self._create_user()
+        user = self._create_user()
         self.browser.get(self.live_server_url)
 
         # 타이틀과 헤더를 확인합니다.
@@ -66,7 +65,7 @@ class NewVisitorTest(LiveServerTestCase):
         input_title.send_keys('Test Poster')
 
         input_image = self.browser.find_element_by_id('id_image')
-        input_image.send_keys(BASE_DIR+'/../testfile/test_image.jpg')
+        input_image.send_keys(BASE_DIR+'/media/testfile/test_image.jpg')
 
         input_writer = self.browser.find_element_by_id('id_writer')
         input_writer.send_keys('test')
