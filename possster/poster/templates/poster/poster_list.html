@@ -7,6 +7,7 @@
 <body>
 <h1>Possster</h1>
 <a href="{% url 'add' %}">업로드</a>
+<a href="{% url 'login' %}">로그인</a>
 <ul>
     {% for p in poster %}
         <li><img src="{{ p.image.url }}" /></li>

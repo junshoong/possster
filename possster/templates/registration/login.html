@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Possster - 로그인</title>
+</head>
+<body>
+<form action="." method="POST">{% csrf_token %}
+    {% if form.errors %}
+        <p class="errornote">ID와 비밀번호가 일치하지 않습니다. 다시 입력해주세요.</p>
+    {% endif %}
+    <p>ID와 비밀번호를 입력해주세요.</p>
+    {{ form.as_p }}
+    <input type="submit" value="로그인" />
+</form>
+</body>
+</html>
