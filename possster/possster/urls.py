@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.auth.views import login
 from django.conf.urls.static import static
 from django.conf import settings
 from poster.views import PosterLV
@@ -24,5 +25,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', PosterLV.as_view(), name='index'),
     url(r'^add/$', PosterCV.as_view(), name='add'),
+    url(r'^login/$', login, name='login'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
