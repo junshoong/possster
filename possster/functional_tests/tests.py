@@ -96,9 +96,6 @@ class NewVisitorTest(LiveServerTestCase):
         input_image = self.browser.find_element_by_id('id_image')
         input_image.send_keys(BASE_DIR+'/../testfile/test_image.jpg')
 
-        input_writer = self.browser.find_element_by_id('id_writer')
-        input_writer.send_keys('test')
-
         self.browser.find_element_by_xpath(
             "//input[@type='submit' and @value='저장']"
         ).click()

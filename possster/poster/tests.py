@@ -116,10 +116,9 @@ class PosterEditTest(TestCase):
         response = self.client.post(reverse_lazy('add'), {
             'title': "Test Poster 1",
             'image': self._image,
-            'writer': user.pk,
         })
         new_poster = Poster.objects.first()
         self.assertEqual(Poster.objects.count(), 1)
         self.assertEqual(new_poster.title, 'Test Poster 1')
-        self.assertEqual(new_poster.writer.username, 'test')
+        self.assertEqual(new_poster.writer, user)
         self.assertEqual(302, response.status_code)

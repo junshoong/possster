@@ -20,7 +20,7 @@ class PosterLV(ListView):
 
 class PosterCV(LoginRequiredMixin, CreateView):
     model = Poster
-    fields = ('title', 'image', 'end', 'writer')
+    fields = ('title', 'image', 'end')
     success_url = reverse_lazy('index')
 
     def form_valid(self, form):
