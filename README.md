@@ -1,8 +1,9 @@
 # possster
+[![Build Status](https://travis-ci.com/vaporize93/possster.svg?token=n9ZwF2LE4Sw2aM9mujNf&branch=master)](https://travis-ci.com/vaporize93/possster)
 2017년 SSS 겨울 프로젝트 웹 대자보/포스터 possster
 
 ## 개발 환경
-- windows 10
+- windows 10 , Arch Linux, OS X
 - python 3.5 or 3.6
 - django 1.10
 - postgresql 9.61
