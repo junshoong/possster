@@ -103,3 +103,8 @@ class NewVisitorTest(LiveServerTestCase):
         # 메인화면으로 돌아가 등록된 포스터를 확인합니다.
         first_image = self.browser.find_elements_by_tag_name('img')[0]
         self.assertIn('test_image', first_image.get_attribute('src'))
+
+        # 로그아웃을 합니다.
+        with wait_for_page_load(self.browser):
+            self.browser.find_element_by_link_text('로그아웃').click()
+        self.assertIn('로그아웃', self.browser.title)
