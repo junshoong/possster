@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 from poster.views import PosterLV
 from poster.views import PosterCV
+from possster.views import UserCV
+from possster.views import UserCreateDoneTV
 
 urlpatterns = [
      url(r'^admin/', admin.site.urls),
@@ -28,4 +30,6 @@ urlpatterns = [
      url(r'^add/$', PosterCV.as_view(), name='add'),
      url(r'^login/$', login, name='login'),
      url(r'^logout/$', logout, name='logout'),
+     url(r'^register/$', UserCV.as_view(), name='register'),
+     url(r'^register/done$', UserCreateDoneTV.as_view(), name='register_done'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,8 +6,9 @@ from possster.settings import BASE_DIR
 from django.contrib.auth.models import User
 import time
 
-LOGIN_ID = 'test'
-LOGIN_PW = 'test'
+TEST_ID = 'tester'
+TEST_PW = 'qq12341234'
+TEST_EMAIL = 'tester@example.com'
 
 
 def wait_for(condition_function):
@@ -42,14 +43,14 @@ class NewVisitorTest(LiveServerTestCase):
 
     @staticmethod
     def _create_user():
-        user = User.objects.create(username=LOGIN_ID)
-        user.set_password(LOGIN_PW)
+        user = User.objects.create(username=TEST_ID)
+        user.set_password(TEST_PW)
         user.save()
         return user
 
     def setUp(self):
         self.browser = webdriver.Firefox()
-        self.browser.implicitly_wait(5)
+        self.browser.implicitly_wait(3)
 
     def tearDown(self):
         self.browser.quit()
@@ -59,13 +60,41 @@ class NewVisitorTest(LiveServerTestCase):
             os.remove(f)
 
     def test_open_browser(self):
-        self._create_user()
+        # self._create_user()
         self.browser.get(self.live_server_url)
 
         # 타이틀과 헤더를 확인합니다.
         self.assertIn('Possster', self.browser.title)
         header = self.browser.find_element_by_tag_name('h1')
         self.assertIn('Possster', header.text)
+
+        # 회원가입 링크로 이동합니다.
+        with wait_for_page_load(self.browser):
+            self.browser.find_element_by_link_text('회원가입').click()
+        self.assertIn('회원가입', self.browser.title)
+
+        # 주어진 필드에 값을 입력합니다.
+        username = self.browser.find_element_by_id('id_username')
+        username.send_keys(TEST_ID)
+
+        email = self.browser.find_element_by_id('id_email')
+        email.send_keys(TEST_EMAIL)
+
+        password1 = self.browser.find_element_by_id('id_password1')
+        password1.send_keys(TEST_PW)
+
+        password2 = self.browser.find_element_by_id('id_password2')
+        password2.send_keys(TEST_PW)
+
+        # 회원가입을 누르면 계정이 등록되고 등록완료 화면으로 이동됩니다.
+        with wait_for_page_load(self.browser):
+            password2.send_keys(Keys.ENTER)
+        self.assertIn('회원가입완료', self.browser.title)
+
+        # 홈 화면으로 이동합니다.
+        with wait_for_page_load(self.browser):
+            self.browser.find_element_by_link_text('홈 화면').click()
+        self.assertIn('Possster', self.browser.title)
 
         # 로그인 버튼을 눌러 로그인 화면으로 이동합니다.
         with wait_for_page_load(self.browser):
@@ -74,15 +103,15 @@ class NewVisitorTest(LiveServerTestCase):
 
         # ID와 PW를 입력하고 로그인합니다.
         login_id = self.browser.find_element_by_id('id_username')
-        login_id.send_keys(LOGIN_ID)
+        login_id.send_keys(TEST_ID)
 
         login_pw = self.browser.find_element_by_id('id_password')
-        login_pw.send_keys(LOGIN_PW)
+        login_pw.send_keys(TEST_PW)
         login_pw.send_keys(Keys.ENTER)
 
         # 메인화면으로 돌아와서 로그인이 되었는지 확인합니다.
-        account_link = self.browser.find_element_by_link_text(LOGIN_ID)
-        self.assertEqual(account_link.text, LOGIN_ID)
+        account_link = self.browser.find_element_by_link_text(TEST_ID)
+        self.assertEqual(account_link.text, TEST_ID)
 
         # upload 버튼을 눌러 포스터를 새로 등록하는 화면으로 이동합니다.
         with wait_for_page_load(self.browser):
