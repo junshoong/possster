@@ -68,17 +68,35 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     @staticmethod
     def _create_user():
-        user = User.objects.create(username=TEST_ID)
+        user = User.objects.create(username=TEST_ID, email=TEST_EMAIL)
         user.set_password(TEST_PW)
         user.save()
         return user
+
+    @staticmethod
+    def _login_user(cls):
+        # 로그인 버튼을 눌러 로그인 화면으로 이동합니다.
+        with wait_for_page_load(cls.browser):
+            cls.browser.find_element_by_link_text('로그인').click()
+        cls.assertIn('로그인', cls.browser.title)
+
+        # ID와 PW를 입력하고 로그인합니다.
+        login_id = cls.browser.find_element_by_id('id_username')
+        login_id.send_keys(TEST_ID)
+
+        login_pw = cls.browser.find_element_by_id('id_password')
+        login_pw.send_keys(TEST_PW)
+        login_pw.send_keys(Keys.ENTER)
+
+        # 메인화면으로 돌아와서 로그인이 되었는지 확인합니다.
+        account_link = cls.browser.find_element_by_link_text(TEST_ID)
+        cls.assertEqual(account_link.text, TEST_ID)
 
 
 @override_settings(MEDIA_ROOT='/tmp/django_test/')
 class NewVisitorTest(FunctionalTest):
 
     def test_open_browser(self):
-        # self._create_user()
         self.browser.get(self.live_server_url)
 
         # 타이틀과 헤더를 확인합니다.
@@ -114,22 +132,8 @@ class NewVisitorTest(FunctionalTest):
             self.browser.find_element_by_link_text('홈 화면').click()
         self.assertIn('Possster', self.browser.title)
 
-        # 로그인 버튼을 눌러 로그인 화면으로 이동합니다.
-        with wait_for_page_load(self.browser):
-            self.browser.find_element_by_link_text('로그인').click()
-        self.assertIn('로그인', self.browser.title)
-
-        # ID와 PW를 입력하고 로그인합니다.
-        login_id = self.browser.find_element_by_id('id_username')
-        login_id.send_keys(TEST_ID)
-
-        login_pw = self.browser.find_element_by_id('id_password')
-        login_pw.send_keys(TEST_PW)
-        login_pw.send_keys(Keys.ENTER)
-
-        # 메인화면으로 돌아와서 로그인이 되었는지 확인합니다.
-        account_link = self.browser.find_element_by_link_text(TEST_ID)
-        self.assertEqual(account_link.text, TEST_ID)
+        # 로그인 합니다.
+        self._login_user(self)
 
         # upload 버튼을 눌러 포스터를 새로 등록하는 화면으로 이동합니다.
         with wait_for_page_load(self.browser):
