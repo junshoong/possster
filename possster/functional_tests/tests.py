@@ -1,10 +1,11 @@
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import override_settings
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from possster.settings import BASE_DIR
 from django.contrib.auth.models import User
 import time
+import sys
 
 TEST_ID = 'tester'
 TEST_PW = 'qq12341234'
@@ -38,15 +39,21 @@ class wait_for_page_load(object):
         wait_for(self.page_has_loaded)
 
 
-@override_settings(MEDIA_ROOT='/tmp/django_test/')
-class NewVisitorTest(LiveServerTestCase):
+class FunctionalTest(StaticLiveServerTestCase):
 
-    @staticmethod
-    def _create_user():
-        user = User.objects.create(username=TEST_ID)
-        user.set_password(TEST_PW)
-        user.save()
-        return user
+    @classmethod
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]
+                return
+        super().setUpClass()
+        cls.server_url = cls.live_server_url
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            super().tearDownClass()
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -58,6 +65,17 @@ class NewVisitorTest(LiveServerTestCase):
         import os
         for f in glob.glob('/tmp/django_test/poster/*'):
             os.remove(f)
+
+    @staticmethod
+    def _create_user():
+        user = User.objects.create(username=TEST_ID)
+        user.set_password(TEST_PW)
+        user.save()
+        return user
+
+
+@override_settings(MEDIA_ROOT='/tmp/django_test/')
+class NewVisitorTest(FunctionalTest):
 
     def test_open_browser(self):
         # self._create_user()
