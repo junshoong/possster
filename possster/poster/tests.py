@@ -58,6 +58,20 @@ class PosterModelTest(TestCase):
         no_end_poster = Poster.objects.create(title='test_poster2', image=self._image, writer=user)
         self.assertFalse(no_end_poster.is_over)
 
+    def test_remain_poster_when_user_delete(self):
+        user = self._create_user()
+        poster = Poster()
+        poster.title = 'test_poster'
+        poster.image = self._image
+        poster.writer = user
+        poster.save()
+        user.delete()
+
+        saved_poster = Poster.objects.all()
+        self.assertEqual(saved_poster.count(), 1)
+        self.assertEqual(saved_poster[0].title, 'test_poster')
+        self.assertEqual(saved_poster[0].writer, None)
+
     def tearDown(self):
         import glob
         import os

@@ -59,7 +59,7 @@ class UserCreationViewTest(SetupClass):
 
 
 class UserDeleteViewTest(SetupClass):
-    def test_uses_register_template(self):
+    def test_user_delete_view(self):
         user_count = User.objects.count()
         user = User.objects.get(username='tester')
         response = self.client.post('/register/remove/'+str(user.pk)+'/', follow=True)
