@@ -67,30 +67,35 @@ class FunctionalTest(StaticLiveServerTestCase):
             os.remove(f)
 
     @staticmethod
-    def _create_user():
+    def create_user():
         user = User.objects.create(username=TEST_ID, email=TEST_EMAIL)
         user.set_password(TEST_PW)
         user.save()
         return user
 
-    @staticmethod
-    def _login_user(cls):
+    def login_user(self):
         # 로그인 버튼을 눌러 로그인 화면으로 이동합니다.
-        with wait_for_page_load(cls.browser):
-            cls.browser.find_element_by_link_text('로그인').click()
-        cls.assertIn('로그인', cls.browser.title)
+        with wait_for_page_load(self.browser):
+            self.browser.find_element_by_link_text('로그인').click()
+        self.assertIn('로그인', self.browser.title)
 
         # ID와 PW를 입력하고 로그인합니다.
-        login_id = cls.browser.find_element_by_id('id_username')
+        login_id = self.browser.find_element_by_id('id_username')
         login_id.send_keys(TEST_ID)
 
-        login_pw = cls.browser.find_element_by_id('id_password')
+        login_pw = self.browser.find_element_by_id('id_password')
         login_pw.send_keys(TEST_PW)
         login_pw.send_keys(Keys.ENTER)
 
         # 메인화면으로 돌아와서 로그인이 되었는지 확인합니다.
-        account_link = cls.browser.find_element_by_link_text(TEST_ID)
-        cls.assertEqual(account_link.text, TEST_ID)
+        account_link = self.browser.find_element_by_link_text(TEST_ID)
+        self.assertEqual(account_link.text, TEST_ID)
+
+        # 타이틀과 헤더를 확인합니다.
+    def check_home_page(self):
+        self.assertIn('Possster', self.browser.title)
+        header = self.browser.find_element_by_tag_name('h1')
+        self.assertIn('Possster', header.text)
 
 
 @override_settings(MEDIA_ROOT='/tmp/django_test/')
@@ -99,10 +104,7 @@ class NewVisitorTest(FunctionalTest):
     def test_open_browser(self):
         self.browser.get(self.live_server_url)
 
-        # 타이틀과 헤더를 확인합니다.
-        self.assertIn('Possster', self.browser.title)
-        header = self.browser.find_element_by_tag_name('h1')
-        self.assertIn('Possster', header.text)
+        self.check_home_page()
 
         # 회원가입 링크로 이동합니다.
         with wait_for_page_load(self.browser):
@@ -130,10 +132,10 @@ class NewVisitorTest(FunctionalTest):
         # 홈 화면으로 이동합니다.
         with wait_for_page_load(self.browser):
             self.browser.find_element_by_link_text('홈 화면').click()
-        self.assertIn('Possster', self.browser.title)
+        self.check_home_page()
 
         # 로그인 합니다.
-        self._login_user(self)
+        self.login_user()
 
         # upload 버튼을 눌러 포스터를 새로 등록하는 화면으로 이동합니다.
         with wait_for_page_load(self.browser):
@@ -152,6 +154,7 @@ class NewVisitorTest(FunctionalTest):
         ).click()
 
         # 메인화면으로 돌아가 등록된 포스터를 확인합니다.
+        self.check_home_page()
         first_image = self.browser.find_elements_by_tag_name('img')[0]
         self.assertIn('test_image', first_image.get_attribute('src'))
 
@@ -159,3 +162,29 @@ class NewVisitorTest(FunctionalTest):
         with wait_for_page_load(self.browser):
             self.browser.find_element_by_link_text('로그아웃').click()
         self.assertIn('로그아웃', self.browser.title)
+
+
+class RemoveRegistrationTest(FunctionalTest):
+    def test_remove_registration(self):
+        self.browser.get(self.live_server_url)
+        self.create_user()
+        self.login_user()
+
+        # 계정 이름을 눌러 마이 페이지로 이동합니다.
+        with wait_for_page_load(self.browser):
+            self.browser.find_element_by_link_text(TEST_ID).click()
+        self.assertIn('마이페이지', self.browser.title)
+
+        # 탈퇴 버튼을 눌러 탈퇴 페이지로 이동합니다.
+        with wait_for_page_load(self.browser):
+            self.browser.find_element_by_link_text('탈퇴').click()
+        self.assertIn('탈퇴', self.browser.title)
+
+        # 승인을 눌러 사이트로부터 계정을 삭제합니다.
+        with wait_for_page_load(self.browser):
+            self.browser.find_element_by_xpath(
+                "//input[@type='submit' and @value='예']"
+            ).click()
+
+        # 타이틀과 헤더를 확인합니다.
+        self.check_home_page()

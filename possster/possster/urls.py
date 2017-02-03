@@ -21,15 +21,16 @@ from django.conf.urls.static import static
 from django.conf import settings
 from poster.views import PosterLV
 from poster.views import PosterCV
-from possster.views import UserCV
-from possster.views import UserCreateDoneTV
+from possster.views import *
 
 urlpatterns = [
-     url(r'^admin/', admin.site.urls),
-     url(r'^$', PosterLV.as_view(), name='index'),
-     url(r'^add/$', PosterCV.as_view(), name='add'),
-     url(r'^login/$', login, name='login'),
-     url(r'^logout/$', logout, name='logout'),
-     url(r'^register/$', UserCV.as_view(), name='register'),
-     url(r'^register/done$', UserCreateDoneTV.as_view(), name='register_done'),
+    url(r'^admin/', admin.site.urls),
+    url(r'^$', PosterLV.as_view(), name='index'),
+    url(r'^add/$', PosterCV.as_view(), name='add'),
+    url(r'^login/$', login, name='login'),
+    url(r'^logout/$', logout, name='logout'),
+    url(r'^register/$', UserCV.as_view(), name='register'),
+    url(r'^register/done$', UserCreateDoneTV.as_view(), name='register_done'),
+    url(r'^mypage/$', UserTV.as_view(), name='mypage'),
+    url(r'^register/remove/(?P<pk>\d+)/$', UserDV.as_view(), name='register_remove'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

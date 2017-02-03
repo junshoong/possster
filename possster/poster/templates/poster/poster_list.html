@@ -8,7 +8,7 @@
 <h1>Possster</h1>
 {% if user.is_active %}
     <a href="{% url 'add' %}">업로드</a>
-    <a href="">{{ user.username }}</a>
+    <a href="{% url 'mypage' %}">{{ user.username }}</a>
     <a href="{% url 'logout' %}">로그아웃</a>
 {% else %}
     <a href="{% url 'login' %}">로그인</a>

@@ -56,3 +56,12 @@ class UserCreationViewTest(SetupClass):
         }, follow=True)
         self.assertRedirects(response, '/register/done')
         self.assertEqual(User.objects.count(), user_count+1)
+
+
+class UserDeleteViewTest(SetupClass):
+    def test_uses_register_template(self):
+        user_count = User.objects.count()
+        user = User.objects.get(username='tester')
+        response = self.client.post('/register/remove/'+str(user.pk)+'/', follow=True)
+        self.assertRedirects(response, '/')
+        self.assertEqual(User.objects.count(), user_count-1)
