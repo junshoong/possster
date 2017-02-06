@@ -15,8 +15,8 @@ tail -n 0 -f /srv/logs/*.log &
 
 # Start nginx processes
 echo Starting nginx
-cp ../dbp /etc/nginx/sites-available/possster_server
-ln -s /etc/nginx/sites-available/possster_server /etc/nginx/sites-enabled/
+cp ../dbp /etc/nginx/sites-available/possster.conf
+ln -s /etc/nginx/sites-available/possster.conf /etc/nginx/sites-enabled/
 rm /etc/nginx/sites-enabled/default
 service nginx start
 
