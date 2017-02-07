@@ -38,7 +38,3 @@ EXPOSE 80
 COPY entry.sh /
 WORKDIR $DOCKYARD_SRVPROJ/possster
 ENTRYPOINT ["/entry.sh"]
-
-
-
-

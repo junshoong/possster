@@ -15,7 +15,7 @@ tail -n 0 -f /srv/logs/*.log &
 
 # Start nginx processes
 echo Starting nginx
-cp ../dbp /etc/nginx/sites-available/possster.conf
+cp ../possster.conf /etc/nginx/sites-available/possster.conf
 ln -s /etc/nginx/sites-available/possster.conf /etc/nginx/sites-enabled/
 rm /etc/nginx/sites-enabled/default
 service nginx start
@@ -23,9 +23,9 @@ service nginx start
 # Start Gunicorn processes
 echo Starting Gunicorn.
 exec gunicorn possster.wsgi:application \
-    --name dbp \
+    --name possster \
     --bind unix:/srv/possster.sock \
-    --workers 3 \ 
+    --workers 3 \
     --log-level=info \
     --log-file=/srv/logs/gunicorn.log \
     --access-logfile=/srv/logs/access.log \

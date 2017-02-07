@@ -19,6 +19,12 @@
 5. 코드를 확인받고 싶으면 `pull request`를 올리고 슬랙에 코드리뷰해달라고 부탁한다.
 6. 코드에 문제가 있는경우에는 되돌린 후에 작성자가 다시 작업한다.
 
+## Docker deploy
+```
+$ docker run --name db -d postgres
+$ docker run --name possster --publish 80:80 --link db:db --env="DJANGO_SETTINGS_MODULE=possster.production" --env="PYTHONIOENCODING=UTF-8" -d harvey/possster
+```
+
 ## Collaborators
 
 김준수, 추건우, 공원배, 고다경
