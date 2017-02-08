@@ -1,11 +1,10 @@
-from possster.settings import *
-
 DEBUG = False
 ALLOWED_HOSTS = ['possster.harveyk.me', ]
 
 STATIC_ROOT = '/srv/static/'
+MEDIA_ROOT = '/srv/media/'
 
-#Database
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -16,4 +15,3 @@ DATABASES = {
         'PORT': 5432,
     }
 }
-     
