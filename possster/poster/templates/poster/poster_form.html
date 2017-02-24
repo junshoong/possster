@@ -1,14 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Possster - 새 poster 업로드</title>
-</head>
-<body>
-<form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="저장" />
-</form>
-</body>
-</html>
+{% extends "layout/default.html" %}
+
+<!-- head -->
+{% block head %}
+
+{% endblock %}
+
+<!-- body -->
+{% block content %}
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="저장" />
+    </form>
+{% endblock %}

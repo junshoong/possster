@@ -17,6 +17,10 @@ class PosterLV(ListView):
     template_name = 'poster/poster_list.html'
     context_object_name = 'poster'
 
+class PosterIndex(ListView):
+    model = Poster
+    template_name = 'poster/index.html'
+    context_object_name = 'index'
 
 class PosterCV(LoginRequiredMixin, CreateView):
     model = Poster

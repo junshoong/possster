@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Possster</title>
+    <link rel="stylesheet" href="{% static "css/normalize.css" %}">
+    <link rel="stylesheet" href="{% static "fonts/font-awesome/css/font-awesome.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/nav.css" %}">
+</head>
+<body>
+    <div class="nav">
+        <div class="logo1"><a href="{% url 'index' %}">possster</a></div>
+        <ul class="user-interface">
+            {% if user.is_active %}
+            <li class="sign-up"><a href="{% url 'logout' %}">sign out</a></li>
+            <li class="sign-up"><a href="{% url 'mypage' %}">mypage</a></li>
+            <li class="sign-in"><a href="{% url 'add' %}">add</a></li>
+            <li class="sign-out"><a href="#">help</a></li>
+            {% else %}
+            <li class="sign-in"><a href="{% url 'login' %}">sign in</a></li>
+            <li class="sign-up"><a href="{% url 'register' %}">sign up</a></li>
+            <li class="sign-out"><a href="#">help</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="nav">
+        <div class="logo"><a href="{% url 'index' %}">possster</a></div>
+        <div class="search">
+            <i class="fa fa-search"></i>
+            <form action="" class="search-form">
+                <input type="text" placeholder="Searching for...">
+            </form>
+
+
+        </div>
+        <ul class="user-interface">
+            {% if user.is_active %}
+            <li class="sign-up"><a href="{% url 'logout' %}">sign out</a></li>
+            <li class="sign-up"><a href="{% url 'mypage' %}">mypage</a></li>
+            <li class="sign-in"><a href="{% url 'add' %}">add</a></li>
+            <li class="sign-out"><a href="#">help</a></li>
+            {% else %}
+            <li class="sign-in"><a href="{% url 'login' %}">sign in</a></li>
+            <li class="sign-up"><a href="{% url 'register' %}">sign up</a></li>
+            <li class="sign-out"><a href="#">help</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- <ul>
+        {% for p in poster %}
+            <li><img src="{{ p.image.url }}" /></li>
+        {% endfor %}
+    </ul> -->
+</body>
+</html>

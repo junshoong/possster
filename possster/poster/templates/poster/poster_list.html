@@ -1,23 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Possster</title>
-</head>
-<body>
-<h1>Possster</h1>
-{% if user.is_active %}
-    <a href="{% url 'add' %}">업로드</a>
-    <a href="{% url 'mypage' %}">{{ user.username }}</a>
-    <a href="{% url 'logout' %}">로그아웃</a>
-{% else %}
-    <a href="{% url 'login' %}">로그인</a>
-    <a href="{% url 'register' %}">회원가입</a>
-{% endif %}
-<ul>
-    {% for p in poster %}
+{% extends "layout/default.html" %}
+
+<!-- head -->
+{% block head %}
+
+{% endblock %}
+
+<!-- body -->
+{% block content %}
+    <ul>
+        {% for p in poster %}
+        {% if p.length > 0 %}
         <li><img src="{{ p.image.url }}" /></li>
-    {% endfor %}
-</ul>
-</body>
-</html>
+        {% else %}
+        <span> not poster </span>
+        {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

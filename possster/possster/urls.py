@@ -20,13 +20,15 @@ from django.contrib.auth.views import logout
 from django.conf.urls.static import static
 from django.conf import settings
 from poster.views import PosterLV
+from poster.views import PosterIndex
 from poster.views import PosterCV
 from possster.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', PosterLV.as_view(), name='index'),
+    url(r'^$', PosterIndex.as_view(), name='index'),
     url(r'^add/$', PosterCV.as_view(), name='add'),
+    url(r'^poster/$', PosterLV.as_view(), name='poster'),
     url(r'^login/$', login, name='login'),
     url(r'^logout/$', logout, name='logout'),
     url(r'^register/$', UserCV.as_view(), name='register'),
