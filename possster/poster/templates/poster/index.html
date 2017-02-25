@@ -1,11 +1,27 @@
 {% extends "layout/default.html" %}
+{% load static %}
 
 <!-- head -->
 {% block head %}
-
+    <link rel="stylesheet" href="{% static "css/index.css" %}">
 {% endblock %}
 
 <!-- body -->
 {% block content %}
-    <h1>hi</h1>
+    <div class="container">
+        <div class="area1">
+            <img src="{% static "images/poster.png" %}" alt="" class="poster one">
+            <img src="{% static "images/poster.png" %}" alt="" class="poster two">
+            <span>hi</span>
+        </div>
+        <div class="area2">
+
+        </div>
+        <div class="area3">
+
+        </div>
+        <div class="area4">
+
+        </div>
+    </div>
 {% endblock %}
