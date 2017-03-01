@@ -1,50 +1,58 @@
 .container
 {
-    width: 100%;
-    height: 2000px;
-    position: relative;
+    display: flex;
+    flex-flow: column;
 }
 
-.area1
+.main
 {
-    width: 100%;
-    height: 700px;
-    position: relative;
-    background: rgba(255, 69, 202, 1);
-}
-
-.area2
-{
-    width: 100%;
+    flex: 1;
     height: 800px;
-    position: relative;
-    background: rgba(25, 64, 188, 1);
+    background: rgba(255, 69, 202, 1);
+    display: flex;
 }
 
-.area3
+.flex
 {
-    width: 100%;
-    height: 600px;
-    position: relative;
-    background: rgba(252, 224, 61, 1);
+    flex: 1;
+    height: 700px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-.area4
+.flex:nth-child(1) { background: rgba(25, 64, 188, 1); }
+.flex:nth-child(2) { background: rgba(14, 114, 104, 1); }
+.flex:nth-child(3) { background: rgba(252, 224, 61, 1); }
+
+
+.block
 {
-    width: 100%;
-    height: 600px;
-    position: relative;
-    background: rgba(14, 114, 104, 1);
+    margin: auto;
+    background: rgba(255, 255, 255, 0.6);
 }
 
-.poster
+.block img
 {
-    width: 330px;
-    height: 400px;
-    display: inline-block;
-    position: absolute;
-    left: 150px;
-    top: 100px;
+    width: 400px;
+}
+
+.block h2
+{
+    margin-top: 5px;
+    text-align: center;
+    letter-spacing: 7px;
+    text-transform: uppercase;
+}
+
+.block p
+{
+    margin: 15px 0 ;
+    letter-spacing: 3px;
+    text-align: center;
 }
 
 /*33,33,33*/
