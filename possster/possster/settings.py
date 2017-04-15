@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Added apps
+    'rest_framework',
     'poster.apps.PosterConfig',
 ]
 
@@ -104,6 +105,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+# Rest_framework settings
+
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 10
+}
 
 
 # Internationalization
