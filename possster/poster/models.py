@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import datetime
 
 
 class Poster(models.Model):
@@ -11,7 +10,3 @@ class Poster(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     end = models.DateTimeField(null=True, blank=True)
-
-    @property
-    def is_over(self):
-        return self.end < datetime.now()
