@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Added apps
     'rest_framework',
+    'corsheaders',
     'poster.apps.PosterConfig',
 ]
 
@@ -50,7 +51,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Added middlewares
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+# django-cors-header setting
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8100',
+    '127.0.0.1:8100',
+)
+
 
 ROOT_URLCONF = 'possster.urls'
 
