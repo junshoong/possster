@@ -23,13 +23,14 @@ class JPEGRenderer(renderers.BaseRenderer):
 class PosterViewSet(viewsets.ModelViewSet):
     """
     `list`, `create`, `retrieve`, `update`, `destroy`
+    and `image` action
     """
     queryset = Poster.objects.all()
     serializer_class = PosterSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
     @detail_route(renderer_classes=[JPEGRenderer])
-    def get_post(self, request, *args, **kwargs):
+    def image(self, request, *args, **kwargs):
         poster = self.get_object()
         return Response(poster.image)
 

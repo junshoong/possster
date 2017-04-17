@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 class PosterSerializer(serializers.HyperlinkedModelSerializer):
     writer = serializers.ReadOnlyField(source='writer.username')
+    image = serializers.HyperlinkedIdentityField(view_name='poster-image', format='html')
 
     class Meta:
         model = Poster
