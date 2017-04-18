@@ -1,8 +1,9 @@
 # possster
+[![Build Status](https://travis-ci.com/vaporize93/possster.svg?token=n9ZwF2LE4Sw2aM9mujNf&branch=master)](https://travis-ci.com/vaporize93/possster)
 2017년 SSS 겨울 프로젝트 웹 대자보/포스터 possster
 
 ## 개발 환경
-- windows 10
+- windows 10 , Arch Linux
 - python 3.5 or 3.6
 - django 1.10
 - postgresql 9.61
@@ -17,6 +18,12 @@
 4. 같은 부분은 개발하지 않도록 조율하고, 수정이 필요한 부분은 일단 `issue`로 등록한다.
 5. 코드를 확인받고 싶으면 `pull request`를 올리고 슬랙에 코드리뷰해달라고 부탁한다.
 6. 코드에 문제가 있는경우에는 되돌린 후에 작성자가 다시 작업한다.
+
+## Docker deploy
+```
+$ docker run --name db -d postgres
+$ docker run --name possster --publish 80:80 --link db:db --env="DJANGO_SETTINGS_MODULE=possster.production" --env="PYTHONIOENCODING=UTF-8" -d harvey/possster
+```
 
 ## Collaborators
 
