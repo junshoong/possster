@@ -3,6 +3,7 @@ from poster.serializers import UserSerializer
 from poster.serializers import PosterSerializer
 from poster.serializers import UserUpdateSerializer
 from poster.serializers import UserCreateSerializer
+from poster.permissions import IsWriterOrReadOnly
 from django.contrib.auth.models import User
 
 from rest_framework import viewsets
@@ -32,7 +33,10 @@ class PosterViewSet(viewsets.ModelViewSet):
     queryset = Poster.objects.all()
     serializer_class = PosterSerializer
     parser_classes = (FormParser, MultiPartParser, )
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    permission_classes = (
+        permissions.DjangoModelPermissionsOrAnonReadOnly,
+        IsWriterOrReadOnly,
+    )
 
     def perform_create(self, serializer):
         serializer.save(writer=self.request.user, image=self.request.data.get('image'))
