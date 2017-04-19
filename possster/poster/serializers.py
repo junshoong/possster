@@ -14,11 +14,19 @@ class PosterSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password_confirm = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    email = serializers.EmailField()
+
+    def validate(self, data):
+        if data['password'] != data['password_confirm']:
+            raise serializers.ValidationError("Not match password")
+        return data
 
     def create(self, validated_data):
         user = User.objects.create(
-            username=validated_data['username']
+            username=validated_data['username'],
+            email=validated_data['email']
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -26,4 +34,4 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('url', 'id', 'username', 'password')
+        fields = ('url', 'id', 'username', 'password', 'password_confirm', 'email')
