@@ -1,11 +1,11 @@
+from django.contrib.auth.models import User
 from poster.models import Poster
 from poster.serializers import UserSerializer
 from poster.serializers import PosterSerializer
-from poster.serializers import UserUpdateSerializer
-from poster.serializers import UserCreateSerializer
 from poster.permissions import IsWriterOrReadOnly
-from django.contrib.auth.models import User
-
+from poster.permissions import IsUserSelf
+from poster.permissions import IsUserSelfOrAdminUser
+from poster.permissions import IsAnonymousUser
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import renderers
@@ -13,6 +13,7 @@ from rest_framework.parsers import FormParser
 from rest_framework.parsers import MultiPartParser
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from rest_framework.exceptions import AuthenticationFailed
 
 
 class JPEGRenderer(renderers.BaseRenderer):
@@ -51,21 +52,35 @@ class UserViewSet(viewsets.ModelViewSet):
     # `list` and `detail` action
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    def get_serializer_class(self):
-        serializer_class = self.serializer_class
-
-        if self.request.method == 'PUT':
-            serializer_class = UserUpdateSerializer
-        elif self.request.method == 'POST':
-            serializer_class = UserCreateSerializer
-
-        return serializer_class
+    permission_classes = (permissions.BasePermission, )
 
     def get_permissions(self):
         if self.request.method == 'DELETE':
             return [permissions.IsAdminUser()]
         elif self.request.method == 'POST':
-            return [permissions.AllowAny()]
+            return [IsAnonymousUser()]
+        elif self.request.method in ('PUT', 'PATCH',):
+            return [IsUserSelf()]
         else:
-            return [permissions.IsAuthenticatedOrReadOnly()]
+            return [IsUserSelfOrAdminUser()]
+
+    def list(self, request, *args, **kwargs):
+        user = self.request.user
+
+        if user.is_active and not user.is_staff:
+            queryset = User.objects.filter(id=user.id)
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+
+        if user.is_staff:
+            queryset = self.filter_queryset(self.get_queryset())
+
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+
+        return Response()

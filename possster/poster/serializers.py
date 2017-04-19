@@ -14,12 +14,6 @@ class PosterSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'id', 'username')
-
-
-class UserCreateSerializer(serializers.HyperlinkedModelSerializer):
     password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
@@ -32,11 +26,4 @@ class UserCreateSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password')
-
-
-class UserUpdateSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'id', 'username')
-
+        fields = ('url', 'id', 'username', 'password')
