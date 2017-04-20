@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission
 from poster.models import Poster
 from poster.serializers import UserSerializer
 from poster.serializers import PosterSerializer
@@ -6,6 +7,7 @@ from poster.permissions import IsWriterOrReadOnly
 from poster.permissions import IsUserSelf
 from poster.permissions import IsUserSelfOrAdminUser
 from poster.permissions import IsAnonymousUser
+from poster.permissions import HasAddPosterPermissionOrReadOnly
 from poster.utils import EmailAuthTokenGenerator
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -39,6 +41,7 @@ class PosterViewSet(viewsets.ModelViewSet):
     permission_classes = (
         permissions.DjangoModelPermissionsOrAnonReadOnly,
         IsWriterOrReadOnly,
+        HasAddPosterPermissionOrReadOnly,
     )
 
     def perform_create(self, serializer):
@@ -92,6 +95,7 @@ class UserViewSet(viewsets.ModelViewSet):
 def verify_view(request, token):
     u = request.user
     e = EmailAuthTokenGenerator()
+    p = Permission.objects.get(codename='add_poster')
 
     # Require login
     if u.is_anonymous:
@@ -101,4 +105,5 @@ def verify_view(request, token):
     if not e.check_token(request.user, token):
         raise NotAuthenticated
 
-    return Response()
+    u.user_permissions.add(p)
+    return Response('<body><p>인증완료</p></body>')
