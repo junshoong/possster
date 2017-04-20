@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from poster.models import Poster
 from django.contrib.auth.models import User
+from poster.utils import send_verify_mail
 
 
 class PosterSerializer(serializers.HyperlinkedModelSerializer):
@@ -30,6 +31,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
+        send_verify_mail(user)
         return user
 
     class Meta:

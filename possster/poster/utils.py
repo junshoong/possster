@@ -3,6 +3,9 @@ from datetime import date
 from django.utils.crypto import salted_hmac
 from django.utils.crypto import constant_time_compare
 from django.utils.http import int_to_base36, base36_to_int
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from possster.settings import DEFAULT_FROM_EMAIL
 from possster.settings import EMAIL_AUTH_TIMEOUT_DAYS
 
 
@@ -55,3 +58,33 @@ class EmailAuthTokenGenerator(object):
         ).hexdigest()[::-3]
 
         return "%s-%s" % (ts_b36, hash_val)
+
+
+def send_verify_mail(user):
+    e = EmailAuthTokenGenerator()
+
+    token = e.make_token(user)
+
+    msg_subject = render_to_string('mail/mail_subject.txt', {
+        'username': user.username,
+        'site_name': 'Possster',
+    })
+    msg_text = render_to_string('mail/mail_msg.txt', {
+        'username': user.username,
+        'site_name': 'Possster',
+        'token': token,
+    })
+    msg_html = render_to_string('mail/mail_msg.html', {
+        'username': user.username,
+        'site_name': 'Possster',
+        'token': token,
+    })
+
+    send_mail(
+        msg_subject,
+        msg_text,
+        DEFAULT_FROM_EMAIL,
+        [user.email],
+        html_message=msg_html,
+    )
+

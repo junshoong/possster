@@ -1,6 +1,4 @@
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
-from possster.settings import DEFAULT_FROM_EMAIL
 from poster.models import Poster
 from poster.serializers import UserSerializer
 from poster.serializers import PosterSerializer
@@ -85,7 +83,3 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         return Response()
-
-    def perform_create(self, serializer):
-        serializer.save()
-        send_mail('title', 'context', DEFAULT_FROM_EMAIL, [serializer.data['email']])
