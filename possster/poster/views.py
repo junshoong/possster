@@ -6,13 +6,16 @@ from poster.permissions import IsWriterOrReadOnly
 from poster.permissions import IsUserSelf
 from poster.permissions import IsUserSelfOrAdminUser
 from poster.permissions import IsAnonymousUser
+from poster.utils import EmailAuthTokenGenerator
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import renderers
 from rest_framework.parsers import FormParser
 from rest_framework.parsers import MultiPartParser
 from rest_framework.decorators import detail_route
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.exceptions import NotAuthenticated
 
 
 class JPEGRenderer(renderers.BaseRenderer):
@@ -83,3 +86,19 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         return Response()
+
+
+@api_view(['GET'])
+def verify_view(request, token):
+    u = request.user
+    e = EmailAuthTokenGenerator()
+
+    # Require login
+    if u.is_anonymous:
+        raise NotAuthenticated
+
+    # Token fail
+    if not e.check_token(request.user, token):
+        raise NotAuthenticated
+
+    return Response()

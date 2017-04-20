@@ -24,5 +24,6 @@ router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'verify/(?P<token>[0-9a-z]{1,5}-[0-9a-z]{14})/$', views.verify_view, name='verify_view'),
     url(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
