@@ -20,25 +20,21 @@ class EmailAuthTokenGenerator(object):
     def check_token(self, user, token):
         try:
             ts_b36, hash_val = token.split('-')
-            print(ts_b36, hash_val)
         except ValueError:
             return False
 
         try:
             ts = base36_to_int(ts_b36)
-            print(ts_b36, ts, hash_val)
         except ValueError:
             return False
 
         if not constant_time_compare(
                 self._make_token_with_timestamp(user, ts), token):
-            print(self._make_token_with_timestamp(user, ts), token)
             return False
 
         # Check time limit
         now = (date.today() - date(2001, 1, 1)).days
         if now - ts > EMAIL_AUTH_TIMEOUT_DAYS:
-            print(now, ts, now-ts)
             return False
 
         return True

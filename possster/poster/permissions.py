@@ -1,4 +1,3 @@
-from django.contrib.auth.models import AnonymousUser
 from rest_framework import permissions
 
 
@@ -23,11 +22,3 @@ class IsUserSelfOrAdminUser(permissions.BasePermission):
 class IsAnonymousUser(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_anonymous()
-
-
-class HasAddPosterPermissionOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        return request.user.has_perm('poster.add_poster')
