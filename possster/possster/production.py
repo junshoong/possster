@@ -1,4 +1,5 @@
 from possster.settings import *
+import os
 
 DEBUG = False
 ALLOWED_HOSTS = ['possster.junshoong.net','52.79.137.232', ]
@@ -17,3 +18,6 @@ DATABASES = {
         'PORT': 5432,
     }
 }
+
+EMAIL_HOST_USER = os.environ['EMAIL_ID']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
