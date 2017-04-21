@@ -26,7 +26,6 @@ RUN mkdir media
 
 # Copy application source code to SRCDIR
 COPY $DOCKYARD_SRC $DOCKYARD_SRVPROJ
-VOLUME ["$DOCKYARD_SRVHOME/media/", "$DOCKYARD_SRVHOME/logs/"]
 
 # Install Python dependencies
 RUN pip3 install -r $DOCKYARD_SRVPROJ/requirements.txt
